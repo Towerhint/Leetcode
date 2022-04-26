@@ -1,7 +1,9 @@
+import java.util.*;
+
 // DFS
 // Time Complexity: m * n
 
-class Solution {
+class dfs_solution {
     final int WATER = 0, LAND = 1;  // land and water toString
     int m, n;   // the size of the grid
     int baseRow, baseCol;   // base row for shape comparision comp.
@@ -23,6 +25,7 @@ class Solution {
                 shapes.add(sb.toString());
             }
         }
+        return shapes.size();
     }
 
     private void dfs(int row, int col, StringBuilder sb) {
@@ -39,7 +42,7 @@ class Solution {
         sb.append('|');
 
         // sink the island to mark it visted
-        grid[row][col] = WATERl
+        grid[row][col] = WATER;
 
         // search top
         dfs(row - 1, col, sb);
@@ -57,7 +60,7 @@ class Solution {
 
 // BFS 
 
-class solution{
+class bfs_solution {
     final int WATER = 0, LAND = 1;
     int m, n;
     int baseRow, baseCol;
@@ -72,7 +75,7 @@ class solution{
 
     // find each islands
         for(int row = 0; row < m; row++) {
-            forr(int col = 0; col < n; col++) {
+            for(int col = 0; col < n; col++) {
                 if(grid[row][col] == WATER) continue;
                 baseRow = row;
                 baseCol = col;
@@ -82,7 +85,7 @@ class solution{
             }
         }
 
-    // return unique islands
+        // return unique islands
         return shapes.size();
     }
     private void bfs(int row, int col, StringBuilder sb) {
@@ -96,11 +99,20 @@ class solution{
             int[] curPos = queue.poll();
             sb.append(curPos[0] - baseRow);
             sb.append(curPos[1]- baseCol);
+            // add all its neighbors (all 4 directions)
+            for (int[] direction : DIRECTIONS) {
+                int curRow = curPos[0] + direction[0];
+                int curCol = curPos[1] + direction[1];
+                if(validPosition(curRow, curCol)){
+                    queue.add(new int[]{curRow, curCol});
+                    grid[curRow][curCol] = WATER;
+                }
+            }
         }
     }
-
-
-
-
-
+    private boolean validPosition(int row, int col) {
+        if(row < 0 || col < 0 || row == m || col == n) return false;
+        if(grid[row][col] == WATER) return false;
+        return true;
+    }
 }
